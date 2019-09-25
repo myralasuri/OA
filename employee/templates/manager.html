@@ -1,0 +1,105 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_content %}
+<div class = 'container'>
+<p> manager : {{ email }} </p>
+<form method="post" novalidate>
+  {% csrf_token %}
+
+pedning leavs
+<table class="table">
+<thead class="table thead-dark"><tr>
+<th scope="col" >employee</th>
+<th scope="col">type</th>
+<th scope="col" >status</th>
+</tr></thead>
+{% for item in pds %}
+    <tr class = 'btn-light'>
+    <td> <p class='btn btn-outline-primary emp' data-pk={{item.pk}} data-object={{item}}> {{ item.emp }} </p> </td> 
+    <td>{{ item.LEave_type }}</td>
+    <td>{{item.status}}</td>
+    </tr>
+  {% endfor %}
+  </form> 
+</div></br>
+
+
+
+<table class="table">
+<thead class="table thead-dark"><tr>
+<th scope="col" >employee</th>
+<th scope="col">type</th>
+<th scope="col" >status</th>
+</tr></thead>
+{% for item in leavs %}
+    <tr>
+    <td> <a data-vals={{item}}> {{ item.emp }} </a> </td> 
+    <td>{{ item.LEave_type }}</td>
+    <td>{{item.status}}</td>
+    </tr>
+  {% endfor %}
+  </form>
+</div></br>
+
+<!-- Modal -->
+<div class="modal" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalTitle">Approve leave for  <p id= 'emp'></p></h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action='' method=POST id='form'>
+        {% csrf_token %}
+          <ul >
+            <li class="list-group-item disabled" id= 'leavetype' >Cras justo odio</li>
+           from <li class="list-group-item disabled" id='fromdate' >Dapibus ac facilisis in</li>
+           to  <li class="list-group-item disabled" id= 'todate' >Morbi leo risus</li>
+          </ul>
+          <select name = 'setstatus' class="custom-select">
+            <option selected>Open this select menu</option>
+            <option value="Approved">Approve</option>
+            <option value="Rejected">Reject</option>
+          </select>
+          <input type='hidden', name='leaveid' id ='leaveid' value =''>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close " data-dismiss="modal" >Close</button>
+        <button type="button" class="btn btn-primary" id ='save'>Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$('.emp').on('click',  function(){
+  //console.log("hello")
+ // $('#exampleModalLong').trigger('focus')
+ let vals =  $(this).data('pk')
+ let obj = $(this).data('object')
+ console.log({{obj.id}})
+ $('#leaveid').val(vals)
+  $('#exampleModalLong').show("slow");
+})
+
+$('.modal-close').on('click', () =>{
+  $('#exampleModalLong').hide('slow');
+} )
+
+$('#save').on('click', ()=>{
+  $('#form').submit();
+})
+
+$('.ancor').on('click', ()=>{
+  console.log('clicked')
+})
+</script>
+
+{% endblock %}
+
